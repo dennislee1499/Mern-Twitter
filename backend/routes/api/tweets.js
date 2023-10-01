@@ -23,6 +23,7 @@ router.post("/", requireUser, validateTweetInput, async (req, res, next) => {
 });
 
 
+
 router.get("/", async (req, res) => {
   try {
     const tweets = await Tweet.find()

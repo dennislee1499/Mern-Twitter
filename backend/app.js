@@ -6,7 +6,8 @@ const cors = require("cors");
 const { isProduction } = require("./config/keys");
 const csurf = require("csurf");
 
-var usersRouter = require('./routes/api/users');
+require('./models/User')
+const usersRouter = require('./routes/api/users');
 const tweetsRouter = require('./routes/api/tweets');
 const csrfRouter = require('./routes/api/csrf');
 const debug = require('debug');
@@ -33,11 +34,6 @@ app.use(
   })
 );
 
-app.use((req, res, next) => {
-  const err = new Error("Not Found");
-  err.statusCode = 404;
-  next(err);
-});
 
 const serverErrorLogger = debug("backend:error");
 
@@ -46,6 +42,12 @@ const serverErrorLogger = debug("backend:error");
 app.use('/api/users', usersRouter);
 app.use('/api/tweets', tweetsRouter);
 app.use('/api/csrf', csrfRouter);
+
+app.use((req, res, next) => {
+  const err = new Error("Not Found");
+  err.statusCode = 404;
+  next(err);
+});
 
 app.use((err, req, res, next) => {
   serverErrorLogger(err);
